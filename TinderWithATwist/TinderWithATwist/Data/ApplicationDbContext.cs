@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TinderWithATwist.Models;
 
-namespace TinderWithATwist.Data
+namespace TinderWithATwist
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
