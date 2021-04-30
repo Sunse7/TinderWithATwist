@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinderWithATwist", "TinderWithATwist\TinderWithATwist.csproj", "{09A192CB-BFE4-4E7A-8C77-FCEBF6973497}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09A192CB-BFE4-4E7A-8C77-FCEBF6973497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A192CB-BFE4-4E7A-8C77-FCEBF6973497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A192CB-BFE4-4E7A-8C77-FCEBF6973497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A192CB-BFE4-4E7A-8C77-FCEBF6973497}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8A56B73-33C5-44BA-A55A-0F40816BF67E}
+	EndGlobalSection
+EndGlobal
