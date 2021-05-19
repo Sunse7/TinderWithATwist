@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TinderWithATwist.Data;
-using TinderWithATwist.Models;
+using TinderWithATwist;
 
 namespace TinderWithATwist
 {

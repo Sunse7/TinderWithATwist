@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TinderWithATwist.Models;
+using TinderWithATwist;
 
 namespace TinderWithATwist
 {
@@ -17,5 +17,7 @@ namespace TinderWithATwist
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }
