@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
+
 namespace TinderWithATwist
 {
-    [Authorize]
+    
     [Route("[controller]")]
     [ApiController]
     public class ApplicationUserController : ControllerBase
@@ -18,6 +20,19 @@ namespace TinderWithATwist
         public ApplicationUserController(ApplicationDbContext context)
         {
             _context = context;
+
+            ApplicationUser applicationUser = new ApplicationUser();
+
+            // file = Path.GetFileName("~/Image/LuckyHat.jpeg");
+
+
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    file.CopyTo(ms);
+            //    applicationUser.ProfilePicture = ms.ToArray();
+            //}
+            _context.ApplicationUsers.Add(applicationUser);
+            _context.SaveChanges();
         }
 
         [HttpGet("{id}")]
@@ -30,7 +45,7 @@ namespace TinderWithATwist
                 ApplicationUser userInfo = new ApplicationUser
                 {
                     Id = user.Id,
-                    
+
                 };
 
                 return Ok(userInfo);
@@ -39,15 +54,15 @@ namespace TinderWithATwist
             return NotFound();
         }
 
-        [HttpPut]
-        public async Task<ActionResult<ApplicationUser>> PutApplicationUser([FromBody] ApplicationUser applicationUser)
+        [HttpPut("id")]
+        public async Task<ActionResult<ApplicationUser>> PutApplicationUser( string profilePic)
         {
-            ApplicationUser databaseUser = await _context.Users.Where(user => user.Id == applicationUser.Id).FirstOrDefaultAsync();
+            //ApplicationUser databaseUser = await _context.Users.Where(user => user.Id == applicationUser.Id).FirstOrDefaultAsync();
 
-            if (databaseUser == null || applicationUser == null)
-            {
-                return NotFound();
-            }
+            //if (databaseUser == null || applicationUser == null)
+            //{
+            //    return NotFound();
+            //}
 
             //if (applicationUser.CurrentPuzzle != null)
             //{
@@ -67,7 +82,7 @@ namespace TinderWithATwist
             //}
 
             await _context.SaveChangesAsync();
-            return Ok(applicationUser);
+            return Ok(new ApplicationUser());
         }
     }
 }
