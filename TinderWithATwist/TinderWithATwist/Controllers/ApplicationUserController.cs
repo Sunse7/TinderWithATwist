@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 
 
 namespace TinderWithATwist
 {
-    
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class ApplicationUserController : ControllerBase
@@ -20,24 +21,29 @@ namespace TinderWithATwist
         public ApplicationUserController(ApplicationDbContext context)
         {
             _context = context;
-
-            ApplicationUser applicationUser = new ApplicationUser();
-
-            // file = Path.GetFileName("~/Image/LuckyHat.jpeg");
-
-
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    file.CopyTo(ms);
-            //    applicationUser.ProfilePicture = ms.ToArray();
-            //}
-            _context.ApplicationUsers.Add(applicationUser);
-            _context.SaveChanges();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUser>> GetApplicationUser(string id)
+        public async Task<ActionResult<ApplicationUser>> GetApplicationUser(string id, bool getRandomUser)
         {
+            if (getRandomUser)
+            {
+                Random random = new();
+                var userCount = _context.Users.Count();
+                var randomNumber = random.Next(0, userCount - 1);
+                ApplicationUser randomUser = await _context.Users.Where(u => u.Id != id).Skip(randomNumber).Take(1).FirstOrDefaultAsync();
+
+                ApplicationUser randomUserInfo = new ApplicationUser
+                {
+                    Id = randomUser.Id,
+                    Email = randomUser.Email,
+                    ProfilePicture = randomUser.ProfilePicture
+                };
+
+
+                return Ok(randomUserInfo);
+            }
+
             ApplicationUser user = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
 
             if (user != null)
@@ -45,7 +51,8 @@ namespace TinderWithATwist
                 ApplicationUser userInfo = new ApplicationUser
                 {
                     Id = user.Id,
-
+                    Email = user.Email,
+                    ProfilePicture = user.ProfilePicture
                 };
 
                 return Ok(userInfo);
@@ -54,35 +61,20 @@ namespace TinderWithATwist
             return NotFound();
         }
 
-        [HttpPut("id")]
-        public async Task<ActionResult<ApplicationUser>> PutApplicationUser( string profilePic)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApplicationUser>> PutApplicationUser(string id, [FromBody] string base64Image)
         {
-            //ApplicationUser databaseUser = await _context.Users.Where(user => user.Id == applicationUser.Id).FirstOrDefaultAsync();
+            ApplicationUser databaseUser = await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
 
-            //if (databaseUser == null || applicationUser == null)
-            //{
-            //    return NotFound();
-            //}
+            if (databaseUser == null || id == null)
+            {
+                return NotFound();
+            }
 
-            //if (applicationUser.CurrentPuzzle != null)
-            //{
-            //    SentencePuzzle sentencePuzzle = await _context.SentencePuzzles.
-            //        Where(puzzle => puzzle.ID == applicationUser.CurrentPuzzle.ID).
-            //        FirstOrDefaultAsync();
-
-            //    if (sentencePuzzle != null)
-            //    {
-            //        databaseUser.CurrentPuzzle = sentencePuzzle;
-            //    }
-            //}
-            
-            //if (applicationUser.Points > 0)
-            //{
-            //    databaseUser.Points = applicationUser.Points;
-            //}
+            databaseUser.ProfilePicture = base64Image;
 
             await _context.SaveChangesAsync();
-            return Ok(new ApplicationUser());
+            return Ok();
         }
     }
 }
