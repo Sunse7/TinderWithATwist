@@ -37,5 +37,8 @@ namespace TinderWithATwist.Controllers
             })
             .ToArray();
         }
-    }
+        //[HttpPut("id")]
+        //public async Task<ActionResult<ApplicationUser>> PutStuff(string profilePic)
+        //{ }
+       }
 }
