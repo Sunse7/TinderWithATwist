@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { useForm } from 'react-hook-form';
-import authService from './api-authorization/AuthorizeService';
 import { updateProfile } from './Utils/UpdateProfile';
+import { GetProfile } from './Utils/GetProfile';
+import { toBase64 } from './Utils/ToBase64';
 
 export const EditProfileForm = () => {
     // const profileForm = useForm({
@@ -10,21 +11,41 @@ export const EditProfileForm = () => {
     // }); 
     const { register, handleSubmit } = useForm();
     const [selectedFile, setSelectedFile] = useState('');
-
-    const onSubmit = () => {
+    const [picture, setPicture] = useState();
+    
+    const onSubmit = async () => {
         updateProfile(selectedFile);
-        console.log(selectedFile);
+        
+        const base64Pic = await toBase64(selectedFile);
+        setPicture(base64Pic);
     };
 
     useEffect(() => {
-        
-    });
-
+        async function GetPicture() {
+            const isRandom = false;
+            const profile = await GetProfile(isRandom);
+            if (!!profile.profilePicture) {
+                setPicture(profile.profilePicture);
+            }
+        }
+        GetPicture();
+    }, []);
+   
     return (
+        <>
         <form onSubmit={handleSubmit(onSubmit)} >
-            <label>This is a cool label</label>
-            <input placeholder='Pic' {...register} type='file' onChange={(e) => setSelectedFile(e.target.files[0])} />
-            <button>Submit</button>
+            <label>Add a profile picture</label>
+            <input {...register} type='file' onChange={(e) => setSelectedFile(e.target.files[0])} />
+            <button disabled={!selectedFile ? true : false } >Submit</button>
         </form>
+        
+        {picture && (
+            <>
+                <label>This is your profile picture</label> 
+                <img height={500} width={250} src={picture} />
+            </>
+        )} 
+            
+        </>
     );
 }
