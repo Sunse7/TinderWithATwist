@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { updateProfile } from './Utils/UpdateProfile';
 import { GetProfile } from './Utils/GetProfile';
 import { toBase64 } from './Utils/ToBase64';
+import * as S from './ShowNextProfile.styles';
 
 export const EditProfileForm = () => {
     // const profileForm = useForm({
@@ -14,8 +15,7 @@ export const EditProfileForm = () => {
     const [picture, setPicture] = useState();
     
     const onSubmit = async () => {
-        updateProfile(selectedFile);
-        
+        updateProfile(selectedFile);  
         const base64Pic = await toBase64(selectedFile);
         setPicture(base64Pic);
     };
@@ -42,7 +42,7 @@ export const EditProfileForm = () => {
         {picture && (
             <>
                 <label>This is your profile picture</label> 
-                <img height={500} width={250} src={picture} />
+                <S.ProfileImage src={picture} />
             </>
         )} 
             
