@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GetProfile } from './Utils/GetProfile';
+import * as S from './ShowNextProfile.styles';
 
 export const ShowNextProfile = () => {
 
@@ -7,29 +8,29 @@ export const ShowNextProfile = () => {
     const [currentProfile, setCurrentProfile] = useState();
     const isRandom = true;
     
-    useEffect(() => {
-        async function FirstProfile() { //Rename this
-            const randomProfile = await GetProfile(isRandom);
-            setCurrentProfile(randomProfile);
-            setPicture(randomProfile.profilePicture);
-        }
-        FirstProfile();
-    }, []);
-
-    const handleOnClick = async () => {
+    const handleNextProfile = async () => {
         const randomProfile = await GetProfile(isRandom);
         setCurrentProfile(randomProfile);
         setPicture(randomProfile.profilePicture);
     }
 
+    const handleMatchProfile = async () => {
+
+    }
+
+    useEffect(() => {
+        handleNextProfile();
+    }, []);
+
     return (
-        <>
-        <button onClick={handleOnClick}>Nope! Next user</button>
-            {picture && 
-                <> 
-                <label>Cool new user</label>
-                <img src={picture} /> 
-                </>}
-        </>
-    )
+        <> 
+        {picture && 
+            <S.Wrapper>
+                <S.NextProfileButton onClick={handleNextProfile}>Nope! Next user</S.NextProfileButton>
+                <S.MatchButton onClick={handleMatchProfile} >Match this doggo!</S.MatchButton>
+                <S.ProfileName>{currentProfile.email}</S.ProfileName>
+                <S.ProfileImage src={picture} /> 
+                </S.Wrapper>
+        }
+        </>)
 }
