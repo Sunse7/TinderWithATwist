@@ -9,5 +9,6 @@ namespace TinderWithATwist
     public class ApplicationUser : IdentityUser
     {
         public string ProfilePicture { get; set; }
+        public ICollection<ApplicationUser> LikedUsers { get; set; }
     }
 }

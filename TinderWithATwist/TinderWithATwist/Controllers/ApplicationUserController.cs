@@ -62,7 +62,7 @@ namespace TinderWithATwist
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApplicationUser>> PutApplicationUser(string id, [FromBody] string base64Image)
+        public async Task<ActionResult<ApplicationUser>> PutApplicationUser(string id, string base64Image, string likedId)
         {
             ApplicationUser databaseUser = await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
 
@@ -73,8 +73,40 @@ namespace TinderWithATwist
 
             databaseUser.ProfilePicture = base64Image;
 
+
+            if (likedId != null)
+            {
+                ApplicationUser likedUser = await _context.Users.Where(liked => liked.Id == likedId).FirstOrDefaultAsync();
+
+                if (likedUser == null)
+                {
+                    return NotFound();
+                }
+
+                databaseUser.LikedUsers.Add(likedUser);
+            }
+
             await _context.SaveChangesAsync();
             return Ok();
+
         }
+
+        //[HttpPut("{id}")]
+        //public async Task<ActionResult<ApplicationUser>> PutLikedUsers(string id, string likedId)
+        //{
+        //    ApplicationUser databaseUser = await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
+        //    ApplicationUser likedUser = await _context.Users.Where(liked => liked.Id == likedId).FirstOrDefaultAsync();
+        //    //ApplicationUser user = await _context.Users.Where(u => u.Id == likedUser.Id).FirstOrDefaultAsync();
+
+        //    //if (databaseUser == null || likedUser == null || id == null || likedId == null)
+        //    //{
+        //    //    return NotFound();
+        //    //}
+
+        //    databaseUser.LikedUsers.Add(likedUser);
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok();
+        //}
     }
 }
