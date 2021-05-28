@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GetProfile } from './Utils/GetProfile';
 import * as S from './ShowNextProfile.styles';
+import { AddLikedUser } from './Utils/UpdateProfile';
 
 export const ShowNextProfile = () => {
 
@@ -15,7 +16,9 @@ export const ShowNextProfile = () => {
     }
 
     const handleMatchProfile = async () => {
-
+        const likedId = currentProfile.id;
+        console.log('likedId', likedId);
+        await AddLikedUser(likedId);
     }
 
     useEffect(() => {
