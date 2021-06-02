@@ -15,7 +15,7 @@ export const EditProfileForm = () => {
     const [picture, setPicture] = useState();
     
     const onSubmit = async () => {
-        updateProfile(selectedFile);  
+        await updateProfile(selectedFile);  
         const base64Pic = await toBase64(selectedFile);
         setPicture(base64Pic);
     };

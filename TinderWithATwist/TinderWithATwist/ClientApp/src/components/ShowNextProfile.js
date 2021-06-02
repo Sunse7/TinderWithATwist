@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { GetProfile } from './Utils/GetProfile';
+import { GetProfile, GetLikedProfiles } from './Utils/GetProfile';
 import * as S from './ShowNextProfile.styles';
-import { AddLikedUser } from './Utils/UpdateProfile';
+import { AddLikedUser } from './Utils/AddLikedUser';
 
 export const ShowNextProfile = () => {
 
@@ -17,8 +17,12 @@ export const ShowNextProfile = () => {
 
     const handleMatchProfile = async () => {
         const likedId = currentProfile.id;
-        console.log('likedId', likedId);
         await AddLikedUser(likedId);
+    }
+
+    const handleLikedProfiles = async () => {
+        const likedUsers = true;
+        await GetLikedProfiles(likedUsers);
     }
 
     useEffect(() => {
@@ -31,6 +35,7 @@ export const ShowNextProfile = () => {
             <S.Wrapper>
                 <S.NextProfileButton onClick={handleNextProfile}>Nope! Next user</S.NextProfileButton>
                 <S.MatchButton onClick={handleMatchProfile} >Match this doggo!</S.MatchButton>
+                <S.MatchButton onClick={handleLikedProfiles} >Get my liked profiles</S.MatchButton>
                 <S.ProfileName>{currentProfile.email}</S.ProfileName>
                 <S.ProfileImage src={picture} /> 
                 </S.Wrapper>
