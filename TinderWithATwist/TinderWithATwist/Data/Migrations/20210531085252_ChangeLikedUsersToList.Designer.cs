@@ -3,36 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TinderWithATwist;
 
 namespace TinderWithATwist.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210531085252_ChangeLikedUsersToList")]
+    partial class ChangeLikedUsersToList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
-
-            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
-                {
-                    b.Property<string>("LikedByUsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LikedUsersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LikedByUsersId", "LikedUsersId");
-
-                    b.HasIndex("LikedUsersId");
-
-                    b.ToTable("ApplicationUserApplicationUser");
-                });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
@@ -280,6 +267,9 @@ namespace TinderWithATwist.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -329,6 +319,8 @@ namespace TinderWithATwist.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -338,21 +330,6 @@ namespace TinderWithATwist.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
-                {
-                    b.HasOne("TinderWithATwist.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("LikedByUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TinderWithATwist.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("LikedUsersId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -404,6 +381,18 @@ namespace TinderWithATwist.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TinderWithATwist.ApplicationUser", b =>
+                {
+                    b.HasOne("TinderWithATwist.ApplicationUser", null)
+                        .WithMany("LikedUsers")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("TinderWithATwist.ApplicationUser", b =>
+                {
+                    b.Navigation("LikedUsers");
                 });
 #pragma warning restore 612, 618
         }
