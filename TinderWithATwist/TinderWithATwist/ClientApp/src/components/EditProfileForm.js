@@ -44,8 +44,7 @@ export const EditProfileForm = () => {
                 <label>This is your profile picture</label> 
                 <S.ProfileImage src={picture} />
             </>
-        )} 
-            
+        )}   
         </>
     );
 }

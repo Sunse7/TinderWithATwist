@@ -48,6 +48,7 @@ namespace TinderWithATwist
                 var idUser = await _context.Users.Include(user => user.LikedUsers).ThenInclude(row => row.LikedUsers).FirstOrDefaultAsync(u => u.Id == user.Id);
 
                 List<ApplicationUser> likedUsers = new();
+                List<ApplicationUser> likedByUsers = new();
 
                 foreach (ApplicationUser likedUser in idUser.LikedUsers)
                 {
@@ -58,14 +59,31 @@ namespace TinderWithATwist
                     likedUsers.Add(likedUserInfo);
                 }
 
+                foreach (var likedByUser in idUser.LikedByUsers)
+                {
+                    ApplicationUser likedByUserInfo = new()
+                    {
+                        Email = likedByUser.Email
+                    };
+                    likedByUsers.Add(likedByUserInfo);
+                }
+
                 ApplicationUser idUserInfo = new()
                 {
                     Id = idUser.Id,
                     Email = idUser.Email,
-                    LikedUsers = likedUsers
+                    LikedUsers = likedUsers,
+                    LikedByUsers = likedByUsers
                 };
 
-                return Ok(idUserInfo);
+                var query =
+                    from a in likedUsers
+                    join b in likedByUsers on a.Email equals b.Email
+                    select a;
+
+                var matchedUsers = query.ToList();
+
+                return Ok(matchedUsers);
             }
 
             if (user != null)

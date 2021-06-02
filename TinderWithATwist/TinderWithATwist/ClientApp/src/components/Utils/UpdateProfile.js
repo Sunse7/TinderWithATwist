@@ -5,7 +5,7 @@ export const updateProfile = async (userProfilePicture) => {
   const [token, isMe, user, profilePicture] = await Promise.all([authService.getAccessToken(), authService.isAuthenticated(), authService.getUser(), toBase64(userProfilePicture)]);
     
   if (isMe) {
-    const response = await fetch(`ApplicationUser/${user.sub}`, {
+    await fetch(`ApplicationUser/${user.sub}`, {
       method: 'PUT',
       headers: !token ? {} : {
         'Authorization': `Bearer ${token}`,
